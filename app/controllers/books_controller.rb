@@ -1,4 +1,6 @@
 class BooksController < ApplicationController
+  protect_from_forgery :index => [:destroy]
+
 
   def top #初期のページ
   end
@@ -13,15 +15,25 @@ class BooksController < ApplicationController
   end
 
   def update
-    book = Book.find(params[:id])
-    book.update(book_params)
-    redirect_to book_path(book)
+    @books = Book.all
+    @book = Book.find(params[:id])
+    if @book.update(book_params)
+      flash[:notice] = "Book was successfully created."
+      redirect_to book_path(@book)
+    else#失敗
+      render action: :edit
+    end
   end
 
   def create #投稿機能
-  	book = Book.new(book_params)
-  	book.save
-  	redirect_to book_params
+    @books = Book.all
+  	@book = Book.new(book_params)
+    if @book.save
+      flash[:notice] = "Book was successfully created."
+  	  redirect_to book_path(@book)
+    else
+      render action: :index
+    end
   end
 
   def edit #編集画面
@@ -29,9 +41,9 @@ class BooksController < ApplicationController
   end
 
   def destroy
-    book = Book.find(params[:id])
-    book.destroy
-    redirect_to book_path
+    @book = Book.find(params[:id])
+    @book.destroy
+    redirect_to books_path
   end
 
   private
