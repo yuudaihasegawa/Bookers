@@ -6,7 +6,7 @@ class BooksController < ApplicationController
   end
 
   def index #main画面
-    @books = Book.all
+    @books = Book.all.order('id DESC')
     @book = Book.new
   end
 
@@ -18,7 +18,7 @@ class BooksController < ApplicationController
     @books = Book.all
     @book = Book.find(params[:id])
     if @book.update(book_params)
-      flash[:notice] = "Book was successfully created."
+      flash[:notice] = "Book was successfully updated."
       redirect_to book_path(@book)
     else#失敗
       render action: :edit
@@ -44,6 +44,7 @@ class BooksController < ApplicationController
     @book = Book.find(params[:id])
     @book.destroy
     redirect_to books_path
+    flash[:notice] = "Book was successfully destroyed."
   end
 
   private
