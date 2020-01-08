@@ -68,3 +68,7 @@ end
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 gem "jquery-rails"
+
+group :production do
+  gem 'mysql2'
+end
